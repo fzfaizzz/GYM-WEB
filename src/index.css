@@ -122,3 +122,7 @@ body{
   color: black;
   object-fit: cover;
 }
+
+::-webkit-scrollbar{
+  display: none;
+}

@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import LocomotiveScroll from "locomotive-scroll";
-import "locomotive-scroll/dist/locomotive-scroll.css";
+import Lenis from "@studio-freight/lenis";
 
 import Preloader from "./components/Preloader";
 import Hero from "./components/Hero";
@@ -19,14 +18,22 @@ const App = () => {
 
   useEffect(() => {
     if (isLoaded) {
-      const scroll = new LocomotiveScroll({
-        el: scrollRef.current,
-        smooth: true,
-        lerp: 0.1,
+      // Initialize Lenis
+      const lenis = new Lenis({
+        smooth: true, // Enable smooth scrolling
+        lerp: 0.1,    // Adjust the easing factor for smoothness
+        direction: "vertical", // Scrolling direction
       });
 
+      // Animation loop for Lenis
+      const raf = (time) => {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      };
+      requestAnimationFrame(raf);
+
       return () => {
-        if (scroll) scroll.destroy();
+        lenis.destroy(); // Cleanup Lenis instance on unmount
       };
     }
   }, [isLoaded]);
@@ -38,7 +45,6 @@ const App = () => {
 
       {/* Main Content */}
       <div
-        data-scroll-container
         ref={scrollRef}
         style={{
           overflow: "hidden",
@@ -46,30 +52,15 @@ const App = () => {
           visibility: isLoaded ? "visible" : "hidden",
         }}
       >
-        <div data-scroll-section>
-          <Header />
-        </div>
-        <div data-scroll-section>
-          <Hero />
-        </div>
-        <div data-scroll-section>
-          <Services />
-        </div>
-        <div data-scroll-section>
-          <Slider/>
-        </div>
-        {/* <div data-scroll-section>
-          <About />
-        </div> */}
-        <div data-scroll-section>
-          <Gallery />
-        </div>
-        <div data-scroll-section>
-          <Contact/>
-        </div>
-        <div data-scroll-section>
-          <Footer />
-        </div>
+        <Header />
+        <Hero />
+        <Services />
+        <Slider />
+        {/* Uncomment if needed */}
+        {/* <About /> */}
+        <Gallery />
+        <Contact />
+        <Footer />
       </div>
     </>
   );
